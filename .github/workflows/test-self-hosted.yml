@@ -1,0 +1,35 @@
+name: Test Self-Hosted Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: [self-hosted, linux, x64, docker]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: System info
+        run: |
+          echo "=== Hostname ==="
+          hostname
+          echo "=== OS ==="
+          uname -a
+          echo "=== User ==="
+          whoami
+          echo "=== Docker ==="
+          docker version
+          echo "=== Disk ==="
+          df -h
+
+      - name: Docker test
+        run: |
+          docker run --rm hello-world
+          echo "Docker works!"
+
+      - name: Runner labels
+        run: |
+          echo "Runner: $RUNNER_NAME"
+          echo "Labels: $RUNNER_LABELS"
